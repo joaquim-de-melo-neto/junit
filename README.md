@@ -1,4 +1,4 @@
-# junit
+# JUnit
 Repositório para prática de JUnit
 Annotation | Description
 -- | --
@@ -22,3 +22,12 @@ Annotation | Description
 @ExtendWith | Used to register extensions declaratively. Such annotations are inherited.
 @RegisterExtension | Used to register extension programmatically via fields. Such fields are inherited unless they are shadowed.
 @TempDir | Used to supply a temporary directory via field injection or parameter injection in a lifecycle method or test method; located in the org.junit.jupiter.api.io package.
+
+
+**Test Class**: any top-level class, static member class, or @Nested class that contains at least one test
+method.\
+Test classes must not be abstract and must have a single constructor.\
+**Test Method**: any instance method that is directly annotated or meta-annotated with @Test,
+@RepeatedTest, @ParameterizedTest, @TestFactory, or @TestTemplate.\
+**Lifecycle Method**: any method that is directly annotated or meta-annotated with @BeforeAll,
+@AfterAll, @BeforeEach, or @AfterEach.\
