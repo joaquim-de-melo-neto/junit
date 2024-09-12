@@ -49,7 +49,7 @@ disable containers and tests declaratively. When multiple ExecutionCondition ext
 registered, a container or test is disabled as soon as one of the conditions returns disabled.
 See ExecutionCondition and the following sections for details.
 
-> Composed Annotations
+> Composed Annotations \
 > Note that any of the conditional annotations listed in the following sections may
 > also be used as a meta-annotation in order to create a custom composed
 > annotation. For example, the @TestOnMac annotation in the @EnabledOnOs demo
@@ -58,7 +58,7 @@ See ExecutionCondition and the following sections for details.
 
 > Unless otherwise stated, each of the conditional annotations listed in the following
 > sections can only be declared once on a given test interface, test class, or test
-> method. If a conditional annotation is directly present, indirectly present, or metapresent multiple times on a given element, only the >first such annotation
+> method. If a conditional annotation is directly present, indirectly present, or metapresent multiple times on a given element, only the > first such annotation
 > discovered by JUnit will be used; any additional declarations will be silently
 > ignored. Note, however, that each conditional annotation may be used in
 > conjunction with other conditional annotations in the
