@@ -1,5 +1,4 @@
 # JUnit
-Repositório para prática de JUnit
 Annotation | Description
 -- | --
 @Test | Denotes that a method is a test method. Unlike JUnit 4’s @Test annotation, this annotation does not declare any attributes, since test extensions in JUnit Jupiter operate based on their own dedicated annotations. Such methods are inherited unless they are overridden.
@@ -23,11 +22,46 @@ Annotation | Description
 @RegisterExtension | Used to register extension programmatically via fields. Such fields are inherited unless they are shadowed.
 @TempDir | Used to supply a temporary directory via field injection or parameter injection in a lifecycle method or test method; located in the org.junit.jupiter.api.io package.
 
-
 **Test Class**: any top-level class, static member class, or @Nested class that contains at least one test
-method.\
-Test classes must not be abstract and must have a single constructor.\
+method. Test classes must not be abstract and must have a single constructor.\
 **Test Method**: any instance method that is directly annotated or meta-annotated with @Test,
 @RepeatedTest, @ParameterizedTest, @TestFactory, or @TestTemplate.\
 **Lifecycle Method**: any method that is directly annotated or meta-annotated with @BeforeAll,
-@AfterAll, @BeforeEach, or @AfterEach.\
+@AfterAll, @BeforeEach, or @AfterEach.
+
+---
+
+@Disabled may be declared without providing a reason; however, the JUnit team
+recommends that developers provide a short explanation for why a test class or
+test method has been disabled. Consequently, the above examples both show the
+use of a reason — for example, @Disabled("Disabled until bug #42 has been
+resolved"). Some development teams even require the presence of issue tracking
+numbers in the reason for automated traceability, etc.
+
+---
+
+The ExecutionCondition extension API in JUnit Jupiter allows developers to either enable or disable a
+container or test based on certain conditions programmatically. The simplest example of such a
+condition is the built-in DisabledCondition which supports the @Disabled annotation (see Disabling
+Tests). In addition to @Disabled, JUnit Jupiter also supports several other annotation-based
+conditions in the org.junit.jupiter.api.condition package that allow developers to enable or
+disable containers and tests declaratively. When multiple ExecutionCondition extensions are
+registered, a container or test is disabled as soon as one of the conditions returns disabled.
+See ExecutionCondition and the following sections for details.
+
+> Composed Annotations
+> Note that any of the conditional annotations listed in the following sections may
+> also be used as a meta-annotation in order to create a custom composed
+> annotation. For example, the @TestOnMac annotation in the @EnabledOnOs demo
+> shows how you can combine @Test and @EnabledOnOs in a single, reusable
+> annotation.
+
+> Unless otherwise stated, each of the conditional annotations listed in the following
+> sections can only be declared once on a given test interface, test class, or test
+> method. If a conditional annotation is directly present, indirectly present, or metapresent multiple times on a given element, only the >first such annotation
+> discovered by JUnit will be used; any additional declarations will be silently
+> ignored. Note, however, that each conditional annotation may be used in
+> conjunction with other conditional annotations in the
+> org.junit.jupiter.api.condition package.
+
+
