@@ -7,7 +7,7 @@ Annotation | Description
 @TestFactory | Denotes that a method is a test factory for dynamic tests. Such methods are inherited unless they are overridden.
 @TestTemplate | Denotes that a method is a template for test cases designed to be invoked multiple times depending on the number of invocation contexts returned by the registered providers. Such methods are inherited unless they are overridden.
 @TestMethodOrder | Used to configure the test method execution order for the annotated test class; similar to JUnit 4’s @FixMethodOrder. Such annotations are inherited.
-@TestInstance | Used to configure the test instance lifecycle for the annotated test class. Such annotations are inherite
+@TestInstance | Used to configure the test instance lifecycle for the annotated test class. Such annotations are inherited.
 @DisplayName | Declares a custom display name for the test class or test method. Such annotations are not inherited.
 @DisplayNameGeneration | Declares a custom display name generator for the test class. Such annotations are inherited.
 @BeforeEach | Denotes that the annotated method should be executed before each @Test, @RepeatedTest, @ParameterizedTest, or @TestFactory method in the current class; analogous to JUnit 4’s @Before. Such methods are inherited unless they are overridden.
@@ -63,5 +63,16 @@ See ExecutionCondition and the following sections for details.
 > ignored. Note, however, that each conditional annotation may be used in
 > conjunction with other conditional annotations in the
 > org.junit.jupiter.api.condition package.
+
+---
+
+To control the order in which test methods are executed, annotate your test class or test interface
+with @TestMethodOrder and specify the desired MethodOrderer implementation. You can implement
+your own custom MethodOrderer or use one of the following built-in MethodOrderer implementations. \
+• **Alphanumeric:** sorts test methods alphanumerically based on their names and formal parameter lists. \
+• **OrderAnnotation:** sorts test methods numerically based on values specified via the @Order annotation. \
+• **Random:** orders test methods pseudo-randomly and supports configuration of a custom seed.
+
+---
 
 
