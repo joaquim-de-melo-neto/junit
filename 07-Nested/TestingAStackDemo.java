@@ -3,7 +3,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.EmptyStackException;
-30
 import java.util.Stack;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -43,7 +42,7 @@ class TestingAStackDemo {
   @DisplayName("after pushing an element")
   class AfterPushing {
   String anElement = "an element";
-31
+
   @BeforeEach
   void pushAnElement() {
   stack.push(anElement);
