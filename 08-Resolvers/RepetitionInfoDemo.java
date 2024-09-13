@@ -35,7 +35,7 @@ class RepeatedTestsDemo {
 }
 
 /*
-                    OUTPUT
+                     LOGS
 INFO: About to execute repetition 1 of 10 for repeatedTest
 INFO: About to execute repetition 2 of 10 for repeatedTest
 INFO: About to execute repetition 3 of 10 for repeatedTest
@@ -58,4 +58,36 @@ INFO: About to execute repetition 2 of 5 for repeatedTestInGerman
 INFO: About to execute repetition 3 of 5 for repeatedTestInGerman
 INFO: About to execute repetition 4 of 5 for repeatedTestInGerman
 INFO: About to execute repetition 5 of 5 for repeatedTestInGerman
+*/
+
+/*
+        TEST REPORTS
+├─ RepeatedTestsDemo
+│ ├─ repeatedTest()
+│ │ ├─ repetition 1 of 10
+│ │ ├─ repetition 2 of 10
+│ │ ├─ repetition 3 of 10
+│ │ ├─ repetition 4 of 10
+│ │ ├─ repetition 5 of 10
+│ │ ├─ repetition 6 of 10
+│ │ ├─ repetition 7 of 10
+│ │ ├─ repetition 8 of 10
+│ │ ├─ repetition 9 of 10
+│ │ └─ repetition 10 of 10
+│ ├─ repeatedTestWithRepetitionInfo(RepetitionInfo)
+│ │ ├─ repetition 1 of 5
+│ │ ├─ repetition 2 of 5
+│ │ ├─ repetition 3 of 5
+│ │ ├─ repetition 4 of 5
+│ │ └─ repetition 5 of 5
+│ ├─ Repeat!
+│ │ └─ Repeat! 1/1
+│ ├─ Details...
+│ │ └─ Details... :: repetition 1 of 1
+│ └─ repeatedTestInGerman()
+│ ├─ Wiederholung 1 von 5
+│ ├─ Wiederholung 2 von 5
+│ ├─ Wiederholung 3 von 5
+│ ├─ Wiederholung 4 von 5
+│ └─ Wiederholung 5 von 5 
 */
