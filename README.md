@@ -84,7 +84,6 @@ is the default behavior in JUnit Jupiter and is analogous to all previous versio
 
 If you would prefer that JUnit Jupiter execute all test methods on the same test instance, annotate your test class with @TestInstance(Lifecycle.PER_CLASS). When using this mode, a new test instance will be created once per test class. Thus, if your test methods rely on state stored in instance variables, you may need to reset that state in @BeforeEach or @AfterEach methods. The "per-class" mode has some additional benefits over the default "per-method" mode. Specifically, with the "per-class" mode it becomes possible to declare @BeforeAll and @AfterAll on non-static methods as well as on interface default methods. The "per-class" mode therefore also makes it possible to use @BeforeAll and @AfterAll methods in @Nested test classes. \
 
-Parameterized tests make it possible to run a test multiple times with different arguments. They are
-declared just like regular @Test methods but use the @ParameterizedTest annotation instead. In
-addition, you must declare at least one source that will provide the arguments for each invocation
-and then consume the arguments in the test method.
+Parameterized tests make it possible to run a test multiple times with different arguments. They are declared just like regular @Test methods but use the @ParameterizedTest annotation instead. In addition, you must declare at least one source that will provide the arguments for each invocation
+and then consume the arguments in the test method. \
+In order to use parameterized tests you need to add a dependency on the junit-jupiter-params artifact. Please refer to Dependency Metadata for details
