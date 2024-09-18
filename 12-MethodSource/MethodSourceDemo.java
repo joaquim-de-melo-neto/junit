@@ -28,3 +28,43 @@ void testWithDefaultLocalMethodSource(String argument) {
 static Stream<String> testWithDefaultLocalMethodSource() {
   return Stream.of("apple", "banana");
 }
+
+/*If a parameterized test method declares multiple parameters, you need to return a collection,
+stream, or array of Arguments instances or object arrays as shown below (see the Javadoc for
+@MethodSource for further details on supported return types). Note that arguments(Object…) is a
+static factory method defined in the Arguments interface. In addition, Arguments.of(Object…) may be
+used as an alternative to arguments(Object…).*/
+
+@ParameterizedTest
+@MethodSource("stringIntAndListProvider")
+void testWithMultiArgMethodSource(String str, int num, List<String> list) {
+  assertEquals(5, str.length());
+  assertTrue(num >=1 && num <=2);
+  assertEquals(2, list.size());
+}
+static Stream<Arguments> stringIntAndListProvider() {
+  return Stream.of(
+  arguments("apple", 1, Arrays.asList("a", "b")),
+  arguments("lemon", 2, Arrays.asList("x", "y"))
+  );
+}
+
+/*An external, static factory method can be referenced by providing its fully qualified method name
+as demonstrated in the following example.*/
+  
+package example;
+import java.util.stream.Stream;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+class ExternalMethodSourceDemo {
+  @ParameterizedTest
+  @MethodSource("example.StringsProviders#tinyStrings")
+  void testWithExternalMethodSource(String tinyString) {
+  // test with tiny string
+  }
+}
+class StringsProviders {
+  static Stream<String> tinyStrings() {
+  return Stream.of(".", "oo", "OOO");
+  }
+}
