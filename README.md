@@ -80,10 +80,22 @@ effects due to mutable test instance state, JUnit creates a new instance of each
 executing each test method (see Test Classes and Methods). This "per-method" test instance lifecycle
 is the default behavior in JUnit Jupiter and is analogous to all previous versions of JUnit.
 > Please note that the test class will still be instantiated if a given test method is disabled via a condition (e.g., @Disabled, @DisabledOnOs, etc.) even when the "permethod" test
-> instance lifecycle mode is active. \
+> instance lifecycle mode is active. 
 
-If you would prefer that JUnit Jupiter execute all test methods on the same test instance, annotate your test class with @TestInstance(Lifecycle.PER_CLASS). When using this mode, a new test instance will be created once per test class. Thus, if your test methods rely on state stored in instance variables, you may need to reset that state in @BeforeEach or @AfterEach methods. The "per-class" mode has some additional benefits over the default "per-method" mode. Specifically, with the "per-class" mode it becomes possible to declare @BeforeAll and @AfterAll on non-static methods as well as on interface default methods. The "per-class" mode therefore also makes it possible to use @BeforeAll and @AfterAll methods in @Nested test classes. \
+If you would prefer that JUnit Jupiter execute all test methods on the same test instance, annotate your test class with @TestInstance(Lifecycle.PER_CLASS). When using this mode, a new test instance will be created once per test class. Thus, if your test methods rely on state stored in instance variables, you may need to reset that state in @BeforeEach or @AfterEach methods. The "per-class" mode has some additional benefits over the default "per-method" mode. Specifically, with the "per-class" mode it becomes possible to declare @BeforeAll and @AfterAll on non-static methods as well as on interface default methods. The "per-class" mode therefore also makes it possible to use @BeforeAll and @AfterAll methods in @Nested test classes. 
 
 Parameterized tests make it possible to run a test multiple times with different arguments. They are declared just like regular @Test methods but use the @ParameterizedTest annotation instead. In addition, you must declare at least one source that will provide the arguments for each invocation
-and then consume the arguments in the test method. \
-In order to use parameterized tests you need to add a dependency on the junit-jupiter-params artifact. Please refer to Dependency Metadata for details
+and then consume the arguments in the test method. 
+In order to use parameterized tests you need to add a dependency on the junit-jupiter-params artifact. Please refer to Dependency Metadata for details. 
+
+To apply the same timeout to all test methods within a test class and all of its @Nested classes, you
+can declare the @Timeout annotation at the class level. It will then be applied to all test, test factory,
+and test template methods within that class and its @Nested classes unless overridden by a @Timeout
+annotation on a specific method or @Nested class. Please note that @Timeout annotations declared at
+the class level are not applied to lifecycle methods.  
+
+Declaring @Timeout on a @TestFactory method checks that the factory method returns within the
+specified duration but does not verify the execution time of each individual DynamicTest generated
+by the factory. Please use assertTimeout() or assertTimeoutPreemptively() for that purpose.
+If @Timeout is present on a @TestTemplate method — for example, a @RepeatedTest or
+@ParameterizedTest — each invocation will have the given timeout applied to it.
