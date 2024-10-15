@@ -29,6 +29,13 @@ method. Test classes must not be abstract and must have a single constructor.\
 **Lifecycle Method**: any method that is directly annotated or meta-annotated with @BeforeAll,
 @AfterAll, @BeforeEach, or @AfterEach.
 
+Test methods and lifecycle methods may be declared locally within the current test class, inherited
+from superclasses, or inherited from interfaces (see Test Interfaces and Default Methods). In
+addition, test methods and lifecycle methods must not be abstract and must not return a value.
+
+Test classes, test methods, and lifecycle methods are not required to be public, but
+they must not be private
+
 ---
 
 @Disabled may be declared without providing a reason; however, the JUnit team
