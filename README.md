@@ -22,6 +22,8 @@ Annotation | Description
 @RegisterExtension | Used to register extension programmatically via fields. Such fields are inherited unless they are shadowed.
 @TempDir | Used to supply a temporary directory via field injection or parameter injection in a lifecycle method or test method; located in the org.junit.jupiter.api.io package.
 
+## Test Classes and Methods
+
 **Test Class**: any top-level class, static member class, or @Nested class that contains at least one test
 method. Test classes must not be abstract and must have a single constructor.\
 **Test Method**: any instance method that is directly annotated or meta-annotated with @Test,
@@ -36,7 +38,7 @@ addition, test methods and lifecycle methods must not be abstract and must not r
 Test classes, test methods, and lifecycle methods are not required to be public, but
 they must not be private
 
----
+## Display Names
 
 JUnit Jupiter supports custom display name generators that can be configured via the
 @DisplayNameGeneration annotation. Values provided via @DisplayName annotations always take
@@ -57,7 +59,8 @@ src/test/resources/junit-platform.properties):
 ```
 junit.jupiter.displayname.generator.default = org.junit.jupiter.api.DisplayNameGenerator$ReplaceUnderscores
 ```
----
+
+## Assertions
 
 > Contrary to declarative timeouts, the various assertTimeoutPreemptively() methods
 > in the Assertions class execute the provided executable or supplier in a different
@@ -75,7 +78,7 @@ junit.jupiter.displayname.generator.default = org.junit.jupiter.api.DisplayNameG
 > Similar side effects may be encountered with other frameworks that rely on
 > ThreadLocal storage.
 
----
+## Disabling Tests
 
 @Disabled may be declared without providing a reason; however, the JUnit team
 recommends that developers provide a short explanation for why a test class or
@@ -84,7 +87,7 @@ use of a reason — for example, @Disabled("Disabled until bug #42 has been
 resolved"). Some development teams even require the presence of issue tracking
 numbers in the reason for automated traceability, etc.
 
----
+## Conditional Test Execution
 
 The ExecutionCondition extension API in JUnit Jupiter allows developers to either enable or disable a
 container or test based on certain conditions programmatically. The simplest example of such a
@@ -110,7 +113,7 @@ See ExecutionCondition and the following sections for details.
 > conjunction with other conditional annotations in the
 > org.junit.jupiter.api.condition package.
 
----
+## Test Execution Order
 
 To control the order in which test methods are executed, annotate your test class or test interface
 with @TestMethodOrder and specify the desired MethodOrderer implementation. You can implement
@@ -119,7 +122,7 @@ your own custom MethodOrderer or use one of the following built-in MethodOrderer
 • **OrderAnnotation:** sorts test methods numerically based on values specified via the @Order annotation. \
 • **Random:** orders test methods pseudo-randomly and supports configuration of a custom seed.
 
----
+## Test Instance Lifecycle
 
 In order to allow individual test methods to be executed in isolation and to avoid unexpected side
 effects due to mutable test instance state, JUnit creates a new instance of each test class before
@@ -129,6 +132,8 @@ is the default behavior in JUnit Jupiter and is analogous to all previous versio
 > instance lifecycle mode is active. 
 
 If you would prefer that JUnit Jupiter execute all test methods on the same test instance, annotate your test class with @TestInstance(Lifecycle.PER_CLASS). When using this mode, a new test instance will be created once per test class. Thus, if your test methods rely on state stored in instance variables, you may need to reset that state in @BeforeEach or @AfterEach methods. The "per-class" mode has some additional benefits over the default "per-method" mode. Specifically, with the "per-class" mode it becomes possible to declare @BeforeAll and @AfterAll on non-static methods as well as on interface default methods. The "per-class" mode therefore also makes it possible to use @BeforeAll and @AfterAll methods in @Nested test classes. 
+
+## Parameterized Tests
 
 Parameterized tests make it possible to run a test multiple times with different arguments. They are declared just like regular @Test methods but use the @ParameterizedTest annotation instead. In addition, you must declare at least one source that will provide the arguments for each invocation
 and then consume the arguments in the test method. 
