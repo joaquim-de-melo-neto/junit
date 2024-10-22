@@ -107,11 +107,18 @@ See ExecutionCondition and the following sections for details.
 
 > Unless otherwise stated, each of the conditional annotations listed in the following
 > sections can only be declared once on a given test interface, test class, or test
-> method. If a conditional annotation is directly present, indirectly present, or metapresent multiple times on a given element, only the > first such annotation
+> method. If a conditional annotation is directly present, indirectly present, or metapresent multiple times on a given element, only the first such annotation
 > discovered by JUnit will be used; any additional declarations will be silently
 > ignored. Note, however, that each conditional annotation may be used in
 > conjunction with other conditional annotations in the
 > org.junit.jupiter.api.condition package.
+
+> As of JUnit Jupiter 5.6, @EnabledIfEnvironmentVariable and
+> @DisabledIfEnvironmentVariable are repeatable annotations. Consequently, these
+> annotations may be declared multiple times on a test interface, test class, or test
+> method. Specifically, these annotations will be found if they are directly present,
+> indirectly present, or meta-present on a given element.
+
 
 ## Test Execution Order
 
