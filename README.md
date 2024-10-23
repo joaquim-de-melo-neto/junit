@@ -179,8 +179,7 @@ used to publish additional data about the current test run. The data can be cons
 
 In JUnit Jupiter you should use TestReporter where you used to print information to stdout or stderr in JUnit 4. Using @RunWith(JUnitPlatform.class) will output all reported entries to stdout. In addition, some IDEs print report entries to stdout or display them in the user interface for test results.
 
-> Other parameter resolvers must be explicitly enabled by registering  
-> appropriate extensions via @ExtendWith.
+> Other parameter resolvers must be explicitly enabled by registering appropriate extensions via @ExtendWith.
 
 Check out the RandomParametersExtension for an example of a custom ParameterResolver. While not
 intended to be production-ready, it demonstrates the simplicity and expressiveness of both the
