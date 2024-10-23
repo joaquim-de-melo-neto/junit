@@ -140,6 +140,53 @@ is the default behavior in JUnit Jupiter and is analogous to all previous versio
 
 If you would prefer that JUnit Jupiter execute all test methods on the same test instance, annotate your test class with @TestInstance(Lifecycle.PER_CLASS). When using this mode, a new test instance will be created once per test class. Thus, if your test methods rely on state stored in instance variables, you may need to reset that state in @BeforeEach or @AfterEach methods. The "per-class" mode has some additional benefits over the default "per-method" mode. Specifically, with the "per-class" mode it becomes possible to declare @BeforeAll and @AfterAll on non-static methods as well as on interface default methods. The "per-class" mode therefore also makes it possible to use @BeforeAll and @AfterAll methods in @Nested test classes. 
 
+Note, however, that setting the default test instance lifecycle mode via the JUnit Platform configuration file is a more robust solution since the configuration file can be checked into a version control system along with your project and can therefore be used within IDEs and your
+build software.
+
+To set the default test instance lifecycle mode to Lifecycle.PER_CLASS via the JUnit Platform configuration file, create a file named junit-platform.properties in the root of the class path (e.g.,
+src/test/resources) with the following content.
+
+```junit.jupiter.testinstance.lifecycle.default = per_class```
+
+## Nested Classes
+
+> Only non-static nested classes (i.e. inner classes) can serve as @Nested 
+> test classes. Nesting can be arbitrarily deep, and those inner classes 
+> are considered to be full members of the test class family with one 
+> exception: @BeforeAll and @AfterAll methods do not work by default. The 
+> reason is that Java does not allow static members in inner classes. 
+> However, this restriction can be circumvented by annotating a @Nested 
+> test class with @TestInstance(Lifecycle.PER_CLASS) (see Test Instance Lifecycle)
+
+## Resolvers
+
+In all prior JUnit versions, test constructors or methods were not allowed to have parameters (at least not with the standard Runner implementations). As one of the major changes in JUnit Jupiter,
+both test constructors and methods are now permitted to have parameters. This allows for greater flexibility and enables Dependency Injection for constructors and methods.
+
+ParameterResolver defines the API for test extensions that wish to dynamically resolve parameters at
+runtime. If a test class constructor, a test method, or a lifecycle method (see Test Classes and Methods) accepts a parameter, the parameter must be resolved at runtime by a registered ParameterResolver.
+
+There are currently three built-in resolvers that are registered automatically.
+
+- TestInfoParameterResolver: if a constructor or method parameter is of type TestInfo, the TestInfoParameterResolver will supply an instance of TestInfo corresponding to the current container or test as the value for the parameter. The TestInfo can then be used to retrieve information about the current container or test such as the display name, the test class, the test method, and associated tags. The display name is either a technical name, such as the name of the test class or test method, or a custom name configured via @DisplayName.
+
+- RepetitionInfoParameterResolver: if a method parameter in a @RepeatedTest, @BeforeEach, or @AfterEach method is of type RepetitionInfo, the RepetitionInfoParameterResolver will supply an
+instance of RepetitionInfo. RepetitionInfo can then be used to retrieve information about the current repetition and the total number of repetitions for the corresponding @RepeatedTest.
+Note, however, that RepetitionInfoParameterResolver is not registered outside the context of a @RepeatedTest. See Repeated Test Examples.
+
+- TestReporterParameterResolver: if a constructor or method parameter is of type TestReporter, the TestReporterParameterResolver will supply an instance of TestReporter. The TestReporter can be
+used to publish additional data about the current test run. The data can be consumed via the reportingEntryPublished() method in a TestExecutionListener, allowing it to be viewed in IDEs or included in reports.
+
+In JUnit Jupiter you should use TestReporter where you used to print information to stdout or stderr in JUnit 4. Using @RunWith(JUnitPlatform.class) will output all reported entries to stdout. In addition, some IDEs print report entries to stdout or display them in the user interface for test results.
+
+> Other parameter resolvers must be explicitly enabled by registering  
+> appropriate extensions via @ExtendWith.
+
+Check out the RandomParametersExtension for an example of a custom ParameterResolver. While not
+intended to be production-ready, it demonstrates the simplicity and expressiveness of both the
+extension model and the parameter resolution process. MyRandomParametersTest demonstrates how
+to inject random values into @Test methods
+
 ## Parameterized Tests
 
 Parameterized tests make it possible to run a test multiple times with different arguments. They are declared just like regular @Test methods but use the @ParameterizedTest annotation instead. In addition, you must declare at least one source that will provide the arguments for each invocation
