@@ -186,6 +186,30 @@ intended to be production-ready, it demonstrates the simplicity and expressivene
 extension model and the parameter resolution process. MyRandomParametersTest demonstrates how
 to inject random values into @Test methods
 
+## Test Interface and Default Methods
+
+JUnit Jupiter allows @Test, @RepeatedTest, @ParameterizedTest, @TestFactory, @TestTemplate,
+@BeforeEach, and @AfterEach to be declared on interface default methods. @BeforeAll and @AfterAll
+can either be declared on static methods in a test interface or on interface default methods if the
+test interface or test class is annotated with @TestInstance(Lifecycle.PER_CLASS) (see Test Instance
+Lifecycle). Here are some examples.
+
+@ExtendWith and @Tag can be declared on a test interface so that classes that implement the interface
+automatically inherit its tags and extensions. See Before and After Test Execution Callbacks for the
+source code of the TimingExtension.
+
+Running the TestInterfaceDemo results in output similar to the following:
+```
+INFO example.TestLifecycleLogger - Before all tests
+INFO example.TestLifecycleLogger - About to execute [dynamicTestsForPalindromes()]
+INFO example.TimingExtension - Method [dynamicTestsForPalindromes] took 19 ms.
+INFO example.TestLifecycleLogger - Finished executing [dynamicTestsForPalindromes()]
+INFO example.TestLifecycleLogger - About to execute [isEqualValue()]
+INFO example.TimingExtension - Method [isEqualValue] took 1 ms.
+INFO example.TestLifecycleLogger - Finished executing [isEqualValue()]
+INFO example.TestLifecycleLogger - After all tests
+```
+
 ## Parameterized Tests
 
 Parameterized tests make it possible to run a test multiple times with different arguments. They are declared just like regular @Test methods but use the @ParameterizedTest annotation instead. In addition, you must declare at least one source that will provide the arguments for each invocation
