@@ -210,6 +210,44 @@ INFO example.TestLifecycleLogger - Finished executing [isEqualValue()]
 INFO example.TestLifecycleLogger - After all tests
 ```
 
+## Repeated Tests
+
+JUnit Jupiter provides the ability to repeat a test a specified number of times by annotating a
+method with @RepeatedTest and specifying the total number of repetitions desired. Each invocation
+of a repeated test behaves like the execution of a regular @Test method with full support for the
+same lifecycle callbacks and extensions.
+The following example demonstrates how to declare a test named repeatedTest() that will be
+automatically repeated 10 times.
+
+```
+@RepeatedTest(10)
+void repeatedTest() {
+  // ...
+}
+```
+
+In addition to specifying the number of repetitions, a custom display name can be configured for
+each repetition via the name attribute of the @RepeatedTest annotation. Furthermore, the display
+name can be a pattern composed of a combination of static text and dynamic placeholders. The
+following placeholders are currently supported.
+
+- {displayName}: display name of the @RepeatedTest method
+- {currentRepetition}: the current repetition count
+- {totalRepetitions}: the total number of repetitions
+
+The default display name for a given repetition is generated based on the following pattern:
+"repetition {currentRepetition} of {totalRepetitions}". Thus, the display names for individual
+repetitions of the previous repeatedTest() example would be: repetition 1 of 10, repetition 2 of
+10, etc. If you would like the display name of the @RepeatedTest method included in the name of
+each repetition, you can define your own custom pattern or use the predefined
+RepeatedTest.LONG_DISPLAY_NAME pattern. The latter is equal to "{displayName} :: repetition
+{currentRepetition} of {totalRepetitions}" which results in display names for individual
+repetitions like repeatedTest() :: repetition 1 of 10, repeatedTest() :: repetition 2 of 10, etc.
+In order to retrieve information about the current repetition and the total number of repetitions
+programmatically, a developer can choose to have an instance of RepetitionInfo injected into a
+@RepeatedTest, @BeforeEach, or @AfterEach method.
+
+
 ## Parameterized Tests
 
 Parameterized tests make it possible to run a test multiple times with different arguments. They are declared just like regular @Test methods but use the @ParameterizedTest annotation instead. In addition, you must declare at least one source that will provide the arguments for each invocation
