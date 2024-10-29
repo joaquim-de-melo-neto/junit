@@ -252,7 +252,26 @@ programmatically, a developer can choose to have an instance of RepetitionInfo i
 
 Parameterized tests make it possible to run a test multiple times with different arguments. They are declared just like regular @Test methods but use the @ParameterizedTest annotation instead. In addition, you must declare at least one source that will provide the arguments for each invocation
 and then consume the arguments in the test method. 
-In order to use parameterized tests you need to add a dependency on the junit-jupiter-params artifact. Please refer to Dependency Metadata for details. 
+
+In order to use parameterized tests you need to add a dependency on the **junit-jupiter-params** artifact. Please refer to Dependency Metadata for details. 
+
+Parameterized test methods typically consume arguments directly from the configured source (see
+Sources of Arguments) following a one-to-one correlation between argument source index and
+method parameter index (see examples in @CsvSource). However, a parameterized test method
+may also choose to aggregate arguments from the source into a single object passed to the method
+(see Argument Aggregation). Additional arguments may also be provided by a ParameterResolver
+(e.g., to obtain an instance of TestInfo, TestReporter, etc.). Specifically, a parameterized test method
+must declare formal parameters according to the following rules.
+
+- Zero or more indexed arguments must be declared first.
+- Zero or more aggregators must be declared next.
+- Zero or more arguments supplied by a ParameterResolver must be declared last.
+
+In this context, an indexed argument is an argument for a given index in the Arguments provided by
+an ArgumentsProvider that is passed as an argument to the parameterized method at the same index
+in the method’s formal parameter list. An aggregator is any parameter of type ArgumentsAccessor or
+any parameter annotated with @AggregateWith.
+
 
 To apply the same timeout to all test methods within a test class and all of its @Nested classes, you
 can declare the @Timeout annotation at the class level. It will then be applied to all test, test factory,

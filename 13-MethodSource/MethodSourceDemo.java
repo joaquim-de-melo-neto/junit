@@ -63,6 +63,7 @@ class ExternalMethodSourceDemo {
   // test with tiny string
   }
 }
+
 class StringsProviders {
   static Stream<String> tinyStrings() {
   return Stream.of(".", "oo", "OOO");
