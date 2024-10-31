@@ -428,7 +428,9 @@ void testWithArgumentsAggregator(@AggregateWith(PersonAggregator.class) Person p
 {
   // perform assertions against person
 }
+```
 
+```
 public class PersonAggregator implements ArgumentsAggregator {
   @Override
   public Person aggregateArguments(ArgumentsAccessor arguments, ParameterContext context) {
