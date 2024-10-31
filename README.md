@@ -253,7 +253,7 @@ programmatically, a developer can choose to have an instance of RepetitionInfo i
 Parameterized tests make it possible to run a test multiple times with different arguments. They are declared just like regular @Test methods but use the @ParameterizedTest annotation instead. In addition, you must declare at least one source that will provide the arguments for each invocation
 and then consume the arguments in the test method. 
 
-In order to use parameterized tests you need to add a dependency on the **junit-jupiter-params** artifact. Please refer to Dependency Metadata for details. 
+> In order to use parameterized tests you need to add a dependency on the **junit-jupiter-params** artifact. Please refer to Dependency > Metadata for details. 
 
 Parameterized test methods typically consume arguments directly from the configured source (see
 Sources of Arguments) following a one-to-one correlation between argument source index and
