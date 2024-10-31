@@ -272,6 +272,107 @@ an ArgumentsProvider that is passed as an argument to the parameterized method a
 in the method’s formal parameter list. An aggregator is any parameter of type ArgumentsAccessor or
 any parameter annotated with @AggregateWith.
 
+## Argument Conversion
+### Widening Conversion
+JUnit Jupiter supports Widening Primitive Conversion for arguments supplied to a
+@ParameterizedTest. For example, a parameterized test annotated with @ValueSource(ints = { 1, 2,
+3 }) can be declared to accept not only an argument of type int but also an argument of type long,
+float, or double.
+
+### Implicit Conversion
+To support use cases like @CsvSource, JUnit Jupiter provides a number of built-in implicit type
+converters. The conversion process depends on the declared type of each method parameter.
+For example, if a @ParameterizedTest declares a parameter of type TimeUnit and the actual type
+supplied by the declared source is a String, the string will be automatically converted into the
+corresponding TimeUnit enum constant.
+
+```
+@ParameterizedTest
+@ValueSource(strings = "SECONDS")
+void testWithImplicitArgumentConversion(ChronoUnit argument) {
+  assertNotNull(argument.name());
+}
+```
+
+> String instances are implicitly converted to the several target types. See documentation.
+
+### Fallback String-to-Object Conversion
+In addition to implicit conversion from strings to the target types listed in the above table, JUnit
+Jupiter also provides a fallback mechanism for automatic conversion from a String to a given target
+type if the target type declares exactly one suitable factory method or a factory constructor as
+defined below.
+- factory method: a non-private, static method declared in the target type that accepts a single
+String argument and returns an instance of the target type. The name of the method can be
+arbitrary and need not follow any particular convention.
+- factory constructor: a non-private constructor in the target type that accepts a single String
+argument. Note that the target type must be declared as either a top-level class or as a static
+nested class.
+
+> If multiple factory methods are discovered, they will be ignored. If a factory
+> method and a factory constructor are discovered, the factory method will be used
+> instead of the constructor.
+
+For example, in the following @ParameterizedTest method, the Book argument will be created by
+invoking the Book.fromTitle(String) factory method and passing "42 Cats" as the title of the book.
+
+```
+@ParameterizedTest
+@ValueSource(strings = "42 Cats")
+void testWithImplicitFallbackArgumentConversion(Book book) {
+  assertEquals("42 Cats", book.getTitle());
+}
+public class Book {
+  private final String title;
+  private Book(String title) {
+    this.title = title;
+  }
+  public static Book fromTitle(String title) { // factory method
+    return new Book(title);
+  }
+  public String getTitle() {
+    return this.title;
+  }
+}
+```
+
+Instead of relying on implicit argument conversion you may explicitly specify an ArgumentConverter
+to use for a certain parameter using the @ConvertWith annotation like in the following example. Note
+that an implementation of ArgumentConverter must be declared as either a top-level class or as a
+static nested class.
+
+```
+@ParameterizedTest
+@EnumSource(ChronoUnit.class)
+void testWithExplicitArgumentConversion(@ConvertWith(ToStringArgumentConverter.class) String argument) {
+    assertNotNull(ChronoUnit.valueOf(argument));
+}
+```
+
+```
+public class ToStringArgumentConverter extends SimpleArgumentConverter {
+  @Override
+  protected Object convert(Object source, Class<?> targetType) {
+    assertEquals(String.class, targetType, "Can only convert to String");
+    if (source instanceof Enum<?>) {
+      return ((Enum<?>) source).name();
+    }
+    return String.valueOf(source);
+  }
+}
+```
+
+Explicit argument converters are meant to be implemented by test and extension authors. Thus,
+junit-jupiter-params only provides a single explicit argument converter that may also serve as a
+reference implementation: JavaTimeArgumentConverter. It is used via the composed annotation
+JavaTimeConversionPattern.
+
+```
+@ParameterizedTest
+@ValueSource(strings = { "01.01.2017", "31.12.2017" })
+void testWithExplicitJavaTimeConverter(@JavaTimeConversionPattern("dd.MM.yyyy") LocalDate argument) {
+  assertEquals(2017, argument.getYear());
+}
+```
 
 To apply the same timeout to all test methods within a test class and all of its @Nested classes, you
 can declare the @Timeout annotation at the class level. It will then be applied to all test, test factory,
