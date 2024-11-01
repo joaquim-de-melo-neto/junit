@@ -6,10 +6,12 @@ class DisplayNameDemo {
   @DisplayName("Custom test name containing spaces")
   void testWithDisplayNameContainingSpaces() {
   }
+
   @Test
   @DisplayName(" °□°） ")
   void testWithDisplayNameContainingSpecialCharacters() {
   }
+  
   @Test
   @DisplayName(" ")
   void testWithDisplayNameContainingEmoji() {

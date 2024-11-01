@@ -253,7 +253,7 @@ programmatically, a developer can choose to have an instance of RepetitionInfo i
 Parameterized tests make it possible to run a test multiple times with different arguments. They are declared just like regular @Test methods but use the @ParameterizedTest annotation instead. In addition, you must declare at least one source that will provide the arguments for each invocation
 and then consume the arguments in the test method. 
 
-> In order to use parameterized tests you need to add a dependency on the **junit-jupiter-params** artifact. Please refer to Dependency > Metadata for details. 
+> In order to use parameterized tests you need to add a dependency on the **junit-jupiter-params** artifact. Please refer to Dependency Metadata for details. 
 
 Parameterized test methods typically consume arguments directly from the configured source (see
 Sources of Arguments) following a one-to-one correlation between argument source index and
@@ -467,11 +467,72 @@ public @interface CsvToPerson {
 }
 ```
 
+## Customizing DisplayNames
+
+By default, the display name of a parameterized test invocation contains the invocation index and
+the String representation of all arguments for that specific invocation. Each of them is preceded by
+the parameter name (unless the argument is only available via an ArgumentsAccessor or
+ArgumentAggregator), if present in the bytecode (for Java, test code must be compiled with the
+-parameters compiler flag).
+
+However, you can customize invocation display names via the name attribute of the
+@ParameterizedTest annotation like in the following example.
+
+```
+@DisplayName("Display name of container")
+@ParameterizedTest(name = "{index} ==> the rank of ''{0}'' is {1}")
+@CsvSource({ "apple, 1", "banana, 2", "'lemon, lime', 3" })
+void testWithCustomDisplayNames(String fruit, int rank) {
+}
+```
+
+When executing the above method using the ConsoleLauncher you will see output similar to the
+following.
+
+```
+Display name of container
+├─ 1 ==> the rank of 'apple' is 1
+├─ 2 ==> the rank of 'banana' is 2
+└─ 3 ==> the rank of 'lemon, lime' is 3
+```
+
+The following placeholders are supported within custom display names.
+
+Placeholder          | Description
+---------------------| ------------------------------
+{displayName}        | the display name of the method
+{index}              | the current invocation index (1-based)
+{arguments}          | the complete, comma-separated arguments list
+{argumentsWithNames} | the complete, comma-separated arguments list with parameter names {0}, {1}, … an individual argument
+
+## Lifecycle and Interoperability
+
+Each invocation of a parameterized test has the same lifecycle as a regular @Test method. For
+example, @BeforeEach methods will be executed before each invocation. Similar to Dynamic Tests,
+invocations will appear one by one in the test tree of an IDE. You may at will mix regular @Test methods and @ParameterizedTest methods within the same test class.
+You may use ParameterResolver extensions with @ParameterizedTest methods. However, method
+parameters that are resolved by argument sources need to come first in the argument list. Since a test class may contain regular tests as well as parameterized tests with different parameter lists, values from argument sources are not resolved for lifecycle methods (e.g. @BeforeEach) and test class constructors.
+
+> Resume: You cannot use argument sources (such as @ValueSource, @CsvSource, etc.) in lifecycle methods such as @BeforeEach and @AfterEach.
+
+```
+@BeforeEach
+void beforeEach(TestInfo testInfo) {
+  // ...
+}
+@ParameterizedTest
+@ValueSource(strings = "apple")
+void testWithRegularParameterResolver(String argument, TestReporter testReporter) {
+  testReporter.publishEntry("argument", argument);
+}
+@AfterEach
+void afterEach(TestInfo testInfo) {
+  // ...
+}
+```
+
 To apply the same timeout to all test methods within a test class and all of its @Nested classes, you
-can declare the @Timeout annotation at the class level. It will then be applied to all test, test factory,
-and test template methods within that class and its @Nested classes unless overridden by a @Timeout
-annotation on a specific method or @Nested class. Please note that @Timeout annotations declared at
-the class level are not applied to lifecycle methods.  
+can declare the @Timeout annotation at the class level. It will then be applied to all test, test factory, and test template methods within that class and its @Nested classes unless overridden by a @Timeout annotation on a specific method or @Nested class. Please note that @Timeout annotations declared at the class level are not applied to lifecycle methods.  
 
 Declaring @Timeout on a @TestFactory method checks that the factory method returns within the
 specified duration but does not verify the execution time of each individual DynamicTest generated
