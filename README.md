@@ -572,11 +572,22 @@ tests can be provided as lambda expressions or method references.
 > As of JUnit Jupiter 5.6.2, dynamic tests must always be created by factory methods; however, this
 > might be complemented by a registration facility in a later release.
 
+## Timeouts
+
+> Declarative timeouts are an experimental feature
+
 To apply the same timeout to all test methods within a test class and all of its @Nested classes, you
 can declare the @Timeout annotation at the class level. It will then be applied to all test, test factory, and test template methods within that class and its @Nested classes unless overridden by a @Timeout annotation on a specific method or @Nested class. Please note that @Timeout annotations declared at the class level are not applied to lifecycle methods.  
+
+To apply the same timeout to all test methods within a test class and all of its @Nested classes, you
+can declare the @Timeout annotation at the class level. It will then be applied to all test, test factory,
+and test template methods within that class and its @Nested classes unless overridden by a @Timeout
+annotation on a specific method or @Nested class. Please note that @Timeout annotations declared at
+the class level are not applied to lifecycle methods.
 
 Declaring @Timeout on a @TestFactory method checks that the factory method returns within the
 specified duration but does not verify the execution time of each individual DynamicTest generated
 by the factory. Please use assertTimeout() or assertTimeoutPreemptively() for that purpose.
+
 If @Timeout is present on a @TestTemplate method — for example, a @RepeatedTest or
 @ParameterizedTest — each invocation will have the given timeout applied to it.
